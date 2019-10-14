@@ -37,7 +37,7 @@ open class NetworkModule {
             .baseUrl(API_BASE_URL)
             .client(okHttpClient)
             //.addConverterFactory(GsonConverterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            //.addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
     }

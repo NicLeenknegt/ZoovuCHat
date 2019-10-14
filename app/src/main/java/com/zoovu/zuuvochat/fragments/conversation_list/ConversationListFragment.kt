@@ -38,13 +38,14 @@ class ConversationListFragment : Fragment() {
             conViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         }?: throw Exception("Invalid activity.")
         conversationListAdapter = ConversationListAdapter(this, conViewModel, activity as MainActivity)
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 1", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 2", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 3", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 4", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 5", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 6", arrayListOf()))
-        conViewModel.conversations.value!!.add(Model.Conversation("cjwix19y2007clrqrtyagcfjz", "TestBot 7", arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

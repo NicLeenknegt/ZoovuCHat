@@ -2,46 +2,48 @@ package com.zoovu.zuuvochat.domain.adapters.zoovu
 
 import android.util.Log
 import com.squareup.moshi.FromJson
-import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
 import com.zoovu.zuuvochat.domain.Model
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 
 class ResponseAdapter {
 
     @FromJson
-    fun responseFromJson(jsonResponse: ZoovuModel.JsonResponse): Model.Conversation {
-        var messages:ArrayList<Model.Message> = arrayListOf()
+    fun responseFromJson(response: ResponseBody): Model.Conversation {
+        var json = JSONObject(response.toString())
+        Log.d("STRING_CHECK",json.getJSONObject("data").getJSONObject("output").getString("type"))
+        return Model.Conversation(name = "none", messages = arrayListOf())
+        /*var messages:ArrayList<Model.Message> = arrayListOf()
         val moshi = Moshi.Builder().build()
-        when(jsonResponse.data.output?.type) {
-            "TEXT" -> messages = ArrayList(jsonResponse.data.output?.text!!.map { Model.Message("none", it.toString()) })
+        when(response.data.output?.type) {
+            "TEXT" -> messages = ArrayList(response.data.output?.text!!.map { Model.Message("none", it.toString()) })
             "BUTTON" -> {
 
-                messages.add(Model.Message("none", jsonResponse.data.output?.buttonQuestion.toString(), jsonResponse.data.output?.isHorizontal!! ))
-                for (it in jsonResponse.data.output?.text!!) {
+                messages.add(Model.Message("none", response.data.output?.buttonQuestion.toString(), response.data.output?.isHorizontal!! ))
+                for (it in response.data.output?.text!!) {
                     val json = moshi.adapter(Map::class.java).toJson(it as Map<*, *>)
                     Log.d("API", json)
                     Log.d("API", moshi.adapter(ZoovuModel.Text::class.java).fromJson(json).toString())
                     if (moshi.adapter(ZoovuModel.Text::class.java).fromJson(json) != null) {
-                        messages.add(Model.Message("none", moshi.adapter(ZoovuModel.Text::class.java).fromJson(json)!!.text, jsonResponse.data.output?.isHorizontal!! ))
+                        messages.add(Model.Message("none", moshi.adapter(ZoovuModel.Text::class.java).fromJson(json)!!.text, response.data.output?.isHorizontal!! ))
                     }
                 }
             }
         }
 
-        return Model.Conversation(jsonResponse.data.context.conversationId, "none", messages)
+        return Model.Conversation(payload = response.data.context, name = "none", messages = messages)*/
     }
 
     @ToJson
-    fun responseToJson(conversation: Model.Conversation):ZoovuModel.JsonResponse {
+    fun responseToJson(conversation: Model.Conversation):ResponseBody {
         var input = ZoovuModel.Input(
           //  SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(Date()),
             conversation.messages.last().text
         )
+        Log.d("STRING_CHECK", "CHECK")
 
-        return ZoovuModel.JsonResponse(ZoovuModel.Data(ZoovuModel.Context(conversation.id), input = input))
+        return ResponseBody.create(null,"")
     }
 }

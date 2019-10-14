@@ -1,8 +1,12 @@
 package com.zoovu.zuuvochat.domain
 
+import org.json.JSONObject
+
 class Model {
     data class Conversation(
-        var id: String,
+        var id:String? = null,
+        @Transient
+        var payload: JSONObject? = null,
         var name:String,
         @Transient
         var messages:ArrayList<Message>

@@ -10,7 +10,7 @@ class ZoovuModel {
     )
 
     data class Data(
-        var context:Context,
+        var context:HashMap<String, Any>,
         var input:Input? = null,
         var output: Output? = null
     )
