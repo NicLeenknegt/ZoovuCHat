@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.zoovu.zuuvochat.data.APIService.ConversationApiService
 import com.zoovu.zuuvochat.domain.Model
-import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuAdapter
 import com.zoovu.zuuvochat.domain.services.SubscribeService
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable

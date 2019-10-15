@@ -9,7 +9,7 @@ class TextRender:RenderType {
     private var messages:ArrayList<Model.Message> = arrayListOf()
 
     override fun renderMessage(json: JSONObject):MessageBuilder{
-        var jsonArray = json.getJSONArray("text")
+        val jsonArray = json.getJSONArray("text")
         for (i in 0 until jsonArray.length()) {
             messages.add(
                 Model.Message(

@@ -10,12 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
-import com.zoovu.zuuvochat.domain.adapters.ModelAdapter
-import com.zoovu.zuuvochat.domain.adapters.zoovu.ResponseAdapter
-import com.zoovu.zuuvochat.domain.adapters.zoovu.TextAdapter
 import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuAdapter
 import com.zoovu.zuuvochat.domain.services.SubscribeService
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 
 @Module
@@ -39,18 +35,9 @@ open class NetworkModule {
 
     @Provides
     internal fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit {
-        val gson = GsonBuilder()
-            .setPrettyPrinting()
-            .create()
-        val moshi = Moshi.Builder()
-            //.add(TextAdapter())
-            .add(ResponseAdapter())
-            .build()
         return Retrofit.Builder()
             .baseUrl(API_BASE_URL)
             .client(okHttpClient)
-            //.addConverterFactory(GsonConverterFactory.create())
-            //.addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
     }

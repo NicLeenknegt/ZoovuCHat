@@ -17,7 +17,7 @@ class ButtonRender:RenderType {
             )
         )
 
-        var jsonArray = json.getJSONArray("text")
+        val jsonArray = json.getJSONArray("text")
         for (i in 0 until jsonArray.length()) {
             messages.add(
                 Model.Message(
