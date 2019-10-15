@@ -10,14 +10,27 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.google.gson.GsonBuilder
 import com.squareup.moshi.Moshi
+import com.zoovu.zuuvochat.domain.adapters.ModelAdapter
 import com.zoovu.zuuvochat.domain.adapters.zoovu.ResponseAdapter
 import com.zoovu.zuuvochat.domain.adapters.zoovu.TextAdapter
+import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuAdapter
+import com.zoovu.zuuvochat.domain.services.SubscribeService
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 
 @Module
 open class NetworkModule {
     val API_BASE_URL = "https://api.cleverbots.ai/api/v1/"
+
+    @Provides
+    internal fun provideSubscribeService(adapter: ZoovuAdapter, conversationApiService: ConversationApiService):SubscribeService {
+        return SubscribeService(adapter, conversationApiService)
+    }
+
+    @Provides
+    internal fun provideModelAdapter():ZoovuAdapter {
+        return ZoovuAdapter()
+    }
 
     @Provides
     internal fun provideConversationApi(retrofit: Retrofit): ConversationApiService {

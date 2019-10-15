@@ -2,7 +2,6 @@ package com.zoovu.zuuvochat.injection
 
 import android.app.Application
 import com.zoovu.zuuvochat.injection.component.DaggerViewModelComponent
-//import com.zoovu.zuuvochat.injection.component.DaggerViewModelComponent
 import com.zoovu.zuuvochat.injection.component.ViewModelComponent
 import com.zoovu.zuuvochat.injection.module.NetworkModule
 
