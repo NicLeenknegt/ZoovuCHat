@@ -1,6 +1,7 @@
-package com.zoovu.zuuvochat.domain.viewmodels
+package com.zoovu.zuuvochat.injection.domain
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
+import com.zoovu.zuuvochat.domain.viewmodels.ConversationViewModel
 import com.zoovu.zuuvochat.injection.App
 
 abstract class InjectedViewModel : ViewModel() {

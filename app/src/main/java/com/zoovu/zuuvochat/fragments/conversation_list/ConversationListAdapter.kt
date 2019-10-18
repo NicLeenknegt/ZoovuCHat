@@ -1,7 +1,5 @@
 package com.zoovu.zuuvochat.fragments.conversation_list
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.zoovu.zuuvochat.R
 import com.zoovu.zuuvochat.domain.Model
 import com.zoovu.zuuvochat.domain.viewmodels.ConversationViewModel

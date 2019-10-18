@@ -1,31 +1,45 @@
 package com.zoovu.zuuvochat.utils.render_factory.render_types
 
 import com.zoovu.zuuvochat.domain.Model
+import com.zoovu.zuuvochat.domain.Type
 import com.zoovu.zuuvochat.utils.render_factory.render_builder.MessageBuilder
 import org.json.JSONObject
 
-class ButtonRender:RenderType {
+class ButtonRender(private var json:JSONObject):RenderType<ArrayList<Model.Message>> {
 
     private var messages:ArrayList<Model.Message> = arrayListOf()
 
-    override fun renderMessage(json: JSONObject): MessageBuilder {
-        messages.add(
-            Model.Message(
-                "none",
-                json.getString("buttonQuestion").toString(),
-                json.getBoolean("isHorizontal")
-            )
-        )
 
-        val jsonArray = json.getJSONArray("text")
-        for (i in 0 until jsonArray.length()) {
-            messages.add(
-                Model.Message(
+
+    override fun render(): MessageBuilder {
+
+        if (json.has("buttonQuestion") && !json.isNull("buttonQuestion")) {
+
+            var buttons:ArrayList<Model.Button> = arrayListOf()
+            var message = Model.Message(
                     "none",
-                    jsonArray.getJSONObject(i).getString("text").toString(),
+                    json.getString("buttonQuestion").toString(),
+                    Type.BUTTON_QUESTION,
                     json.getBoolean("isHorizontal")
                 )
-            )
+
+
+            val jsonArray = json.getJSONArray("text")
+            for (i in 0 until jsonArray.length()) {
+                if (jsonArray.get(i) !is String){
+                    val jsonElement:JSONObject = jsonArray.getJSONObject(i)
+                    if (jsonElement.has("title")) {
+                        buttons.add(
+                            Model.Button(
+                                jsonElement.getString("title").toString(),
+                                jsonElement.getString("text").toString()
+                            )
+                        )
+                    }
+                }
+            }
+            message.buttons = buttons
+            messages = arrayListOf(message)
         }
         return MessageBuilder(messages)
     }

@@ -1,19 +1,32 @@
 package com.zoovu.zuuvochat.fragments.chat_room.chat_room_list
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.zoovu.zuuvochat.R
 import com.zoovu.zuuvochat.domain.Model
+import com.zoovu.zuuvochat.domain.Type
 import com.zoovu.zuuvochat.domain.viewmodels.ConversationViewModel
+import com.zoovu.zuuvochat.fragments.chat_room.ChatRoomController
+import com.zoovu.zuuvochat.fragments.chat_room.ChatRoomFragment
+import com.zoovu.zuuvochat.fragments.chat_room.button_list.ButtonRecyclerViewAdapter
+import com.zoovu.zuuvochat.fragments.chat_room.image_list.ImageRecyclerViewAdapter
+import com.zoovu.zuuvochat.utils.render_factory.RenderFactory
+import com.zoovu.zuuvochat.utils.render_factory.render_picker.ViewHolderPicker
+import kotlinx.android.synthetic.main.chat_recycler_view_message_item.view.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 
 class ChatRecyclerViewAdapter(
@@ -23,46 +36,15 @@ class ChatRecyclerViewAdapter(
 ): RecyclerView.Adapter<ChatRecyclerViewAdapter.MessageItemViewHolder>() {
     private var dataset:ArrayList<Model.Message> = arrayListOf()
 
+
+
     init {
-        /*if (converViewModel.selectedConversation.value != null) {
-            dataset = converViewModel.selectedConversation.value!!.messages
-            this.notifyDataSetChanged()
-        }*/
         converViewModel.selectedConversation.observe(lifecycleOwner, Observer {
             if (it != null) {
                 dataset = ArrayList(it.messages.reversed())
                 this.notifyDataSetChanged()
             }
         })
-        /*dataset = arrayListOf(
-            Model.Message("none","FIRST", false),
-            Model.Message("none","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n", false),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", false),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", false),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","check", true),
-            Model.Message("none","LAST", true))*/
     }
 
     class MessageItemViewHolder(
@@ -72,6 +54,13 @@ class ChatRecyclerViewAdapter(
         val userCardView = view.findViewById<CardView>(R.id.user_message_item_card)
         val replyTextView = view.findViewById<TextView>(R.id.reply_message_item_text)
         val replyCardView = view.findViewById<CardView>(R.id.reply_message_item_card)
+        val recyclerView = view.button_recycler_view as RecyclerView
+        val imageView = view.reply_message_image as ImageView
+        lateinit var verticalLayoutManager:LinearLayoutManager
+        lateinit var horizontalLayoutManager:LinearLayoutManager
+        lateinit var buttonRecyclerViewAdapter: ButtonRecyclerViewAdapter
+        lateinit var imageRecyclerViewAdapter: ImageRecyclerViewAdapter
+
     }
 
 
@@ -85,16 +74,67 @@ class ChatRecyclerViewAdapter(
     override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: MessageItemViewHolder, position: Int) {
-        if (dataset[position].fromUser) {
-            holder.userTextView.text = dataset[position].text
+        holder.verticalLayoutManager = LinearLayoutManager(context)
+        holder.horizontalLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+        holder.buttonRecyclerViewAdapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController)
+        holder.imageRecyclerViewAdapter = ImageRecyclerViewAdapter(lifecycleOwner as ChatRoomFragment)
+        RenderFactory(ViewHolderPicker())
+            .setInput(Pair(dataset[position], holder))
+            .selectViewHolders()
+            .build()
+        /*if (dataset[position].type == Type.MULTIPLE_IMAGES) {
+            holder.replyCardView.visibility = View.GONE
+            holder.userCardView.visibility = View.GONE
+            holder.recyclerView.apply {
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+                adapter = ImageRecyclerViewAdapter(dataset[position].images, lifecycleOwner as ChatRoomFragment)
+            }
+            holder.recyclerView.visibility = View.VISIBLE
+            holder.imageView.visibility = View.GONE
+        } else if (dataset[position].fromUser) {
+            holder.userTextView.text = dataset[position].text!!
             holder.replyCardView.visibility = View.INVISIBLE
             holder.userCardView.visibility = View.VISIBLE
+            holder.recyclerView.visibility = View.GONE
+            holder.imageView.visibility = View.GONE
         } else {
-            holder.replyTextView.text = dataset[position].text
+            if (dataset[position].text != null) {
+                holder.replyTextView.text = dataset[position].text!!
+                holder.replyTextView.visibility = View.VISIBLE
+            } else {
+                holder.replyTextView.visibility = View.GONE
+            }
             holder.userCardView.visibility = View.INVISIBLE
             holder.replyCardView.visibility = View.VISIBLE
-        }
+            holder.recyclerView.visibility = View.GONE
+            holder.imageView.visibility = View.GONE
+            if (dataset[position].type == Type.BUTTON_QUESTION) {
+                val linerLayoutManager = if (dataset[position].isSpecial)
+                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+                else
+                    LinearLayoutManager(context)
+                holder.recyclerView.apply {
+                    layoutManager = linerLayoutManager
+                    adapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController, dataset[position].buttons)
+                }
+                holder.recyclerView.visibility = View.VISIBLE
+            } else if (dataset[position].type == Type.SINGLE_IMAGE) {
+                Glide
+                    .with(context)
+                    .asBitmap()
+                    .load(dataset[position].url)
+                    .fitCenter()
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
+                    .into(holder.imageView)
 
+                holder.imageView.onClick {
+                    (lifecycleOwner as ChatRoomFragment).zoomImageFromThumb(holder.imageView, dataset[position].url)
+                }
+
+                holder.imageView.visibility = View.VISIBLE
+            }
+        }
+*/
     }
 
 }

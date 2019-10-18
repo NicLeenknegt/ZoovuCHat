@@ -8,24 +8,21 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import com.google.gson.GsonBuilder
-import com.squareup.moshi.Moshi
-import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuAdapter
+import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuModule
 import com.zoovu.zuuvochat.domain.services.SubscribeService
 
 
 @Module
 open class NetworkModule {
-    val API_BASE_URL = "https://api.cleverbots.ai/api/v1/"
 
     @Provides
-    internal fun provideSubscribeService(adapter: ZoovuAdapter, conversationApiService: ConversationApiService):SubscribeService {
-        return SubscribeService(adapter, conversationApiService)
+    internal fun provideModule():com.zoovu.zuuvochat.domain.adapters.Module {
+        return ZoovuModule()
     }
 
     @Provides
-    internal fun provideModelAdapter():ZoovuAdapter {
-        return ZoovuAdapter()
+    internal fun provideSubscribeService(conversationApiService: ConversationApiService, module:com.zoovu.zuuvochat.domain.adapters.Module):SubscribeService {
+        return SubscribeService(conversationApiService, module)
     }
 
     @Provides
@@ -34,9 +31,9 @@ open class NetworkModule {
     }
 
     @Provides
-    internal fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit {
+    internal fun provideRetrofitInstance(okHttpClient: OkHttpClient, module: com.zoovu.zuuvochat.domain.adapters.Module): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(API_BASE_URL)
+            .baseUrl(module.getAPIUrl())
             .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()

@@ -1,10 +1,10 @@
 package com.zoovu.zuuvochat
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.zoovu.zuuvochat.domain.viewmodels.ConversationViewModel
 import com.zoovu.zuuvochat.fragments.chat_room.ChatRoomFragment
 import com.zoovu.zuuvochat.fragments.conversation_list.ConversationListFragment
@@ -26,13 +26,13 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
 
-        conViewModel.toastMessage.observe(this, Observer {
+        conViewModel.toastMessage.observe(this, Observer { it:String? ->
             if (it != null) {
                 toast(it).show()
             }
         })
 
-        conViewModel.navigationState.observe(this, Observer {
+        conViewModel.navigationState.observe(this, Observer { it:String? ->
             if (it != null) {
                 when(it) {
                     "CHAT_ROOM"-> {

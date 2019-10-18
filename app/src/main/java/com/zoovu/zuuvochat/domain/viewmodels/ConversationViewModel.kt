@@ -1,16 +1,16 @@
 package com.zoovu.zuuvochat.domain.viewmodels
 
-import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.zoovu.zuuvochat.data.APIService.ConversationApiService
+import androidx.lifecycle.MutableLiveData
 import com.zoovu.zuuvochat.domain.Model
 import com.zoovu.zuuvochat.domain.services.SubscribeService
+import com.zoovu.zuuvochat.injection.domain.InjectedViewModel
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 
-class ConversationViewModel:InjectedViewModel() {
+class ConversationViewModel: InjectedViewModel() {
 
     var conversations = MutableLiveData<ArrayList<Model.Conversation>>()
     var toastMessage = MutableLiveData<String>()
@@ -42,6 +42,7 @@ class ConversationViewModel:InjectedViewModel() {
 
             override fun onError(error: Throwable) {
                 Log.d("API", "ERROR: " + error.message)
+                Log.d("API", "ERROR: CHECK")
             }
 
             override fun onComplete() {
@@ -59,9 +60,8 @@ class ConversationViewModel:InjectedViewModel() {
             }
 
             override fun onNext(replyConversation: Model.Conversation) {
-                var conversation = selectedConversation.value
-                conversation!!.messages.addAll(replyConversation.messages)
-                selectedConversation.postValue(conversation)
+                replyConversation.messages.addAll(0, selectedConversation.value!!.messages)
+                selectedConversation.postValue(replyConversation)
             }
 
             override fun onError(error: Throwable) {
@@ -86,6 +86,6 @@ class ConversationViewModel:InjectedViewModel() {
         conversation!!.messages.add(message)
         selectedConversation.postValue(conversation)
 
-        subscribeService.sendReply("cjwix19y2007clrqrtyagcfjz",conversation, getConversationReplyObserver())
+        subscribeService.sendReply("cjwix19y2007clrqrtyagcfjz", selectedConversation.value!!, getConversationReplyObserver())
     }
 }
