@@ -48,19 +48,21 @@ class ChatRecyclerViewAdapter(
     }
 
     class MessageItemViewHolder(
-        var view: ConstraintLayout
+        var view: ConstraintLayout,
+        var context: Context,
+        lifecycleOwner: LifecycleOwner
     ): RecyclerView.ViewHolder(view) {
-        val userTextView = view.findViewById<TextView>(R.id.user_message_item_text)
-        val userCardView = view.findViewById<CardView>(R.id.user_message_item_card)
-        val replyTextView = view.findViewById<TextView>(R.id.reply_message_item_text)
-        val replyCardView = view.findViewById<CardView>(R.id.reply_message_item_card)
-        val recyclerView = view.button_recycler_view as RecyclerView
-        val imageView = view.reply_message_image as ImageView
-        lateinit var verticalLayoutManager:LinearLayoutManager
-        lateinit var horizontalLayoutManager:LinearLayoutManager
-        lateinit var buttonRecyclerViewAdapter: ButtonRecyclerViewAdapter
-        lateinit var imageRecyclerViewAdapter: ImageRecyclerViewAdapter
-
+        val userTextView:TextView = view.user_message_item_text
+        val userCardView:CardView = view.user_message_item_card
+        val replyTextView:TextView = view.reply_message_item_text
+        val replyCardView:CardView = view.reply_message_item_card
+        val recyclerView:RecyclerView = view.button_recycler_view
+        val imageView:ImageView = view.reply_message_image
+        var verticalLayoutManager = LinearLayoutManager(context)
+        var horizontalLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+        var buttonRecyclerViewAdapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController)
+        var imageRecyclerViewAdapter = ImageRecyclerViewAdapter(lifecycleOwner as ChatRoomFragment)
+        var chatRoomController = lifecycleOwner as ChatRoomController
     }
 
 
@@ -68,73 +70,16 @@ class ChatRecyclerViewAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.chat_recycler_view_message_item, parent, false) as ConstraintLayout
 
-        return MessageItemViewHolder(view)
+        return MessageItemViewHolder(view, context, lifecycleOwner)
     }
 
     override fun getItemCount() = dataset.size
 
     override fun onBindViewHolder(holder: MessageItemViewHolder, position: Int) {
-        holder.verticalLayoutManager = LinearLayoutManager(context)
-        holder.horizontalLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
-        holder.buttonRecyclerViewAdapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController)
-        holder.imageRecyclerViewAdapter = ImageRecyclerViewAdapter(lifecycleOwner as ChatRoomFragment)
         RenderFactory(ViewHolderPicker())
             .setInput(Pair(dataset[position], holder))
             .selectViewHolders()
             .build()
-        /*if (dataset[position].type == Type.MULTIPLE_IMAGES) {
-            holder.replyCardView.visibility = View.GONE
-            holder.userCardView.visibility = View.GONE
-            holder.recyclerView.apply {
-                layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
-                adapter = ImageRecyclerViewAdapter(dataset[position].images, lifecycleOwner as ChatRoomFragment)
-            }
-            holder.recyclerView.visibility = View.VISIBLE
-            holder.imageView.visibility = View.GONE
-        } else if (dataset[position].fromUser) {
-            holder.userTextView.text = dataset[position].text!!
-            holder.replyCardView.visibility = View.INVISIBLE
-            holder.userCardView.visibility = View.VISIBLE
-            holder.recyclerView.visibility = View.GONE
-            holder.imageView.visibility = View.GONE
-        } else {
-            if (dataset[position].text != null) {
-                holder.replyTextView.text = dataset[position].text!!
-                holder.replyTextView.visibility = View.VISIBLE
-            } else {
-                holder.replyTextView.visibility = View.GONE
-            }
-            holder.userCardView.visibility = View.INVISIBLE
-            holder.replyCardView.visibility = View.VISIBLE
-            holder.recyclerView.visibility = View.GONE
-            holder.imageView.visibility = View.GONE
-            if (dataset[position].type == Type.BUTTON_QUESTION) {
-                val linerLayoutManager = if (dataset[position].isSpecial)
-                    LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
-                else
-                    LinearLayoutManager(context)
-                holder.recyclerView.apply {
-                    layoutManager = linerLayoutManager
-                    adapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController, dataset[position].buttons)
-                }
-                holder.recyclerView.visibility = View.VISIBLE
-            } else if (dataset[position].type == Type.SINGLE_IMAGE) {
-                Glide
-                    .with(context)
-                    .asBitmap()
-                    .load(dataset[position].url)
-                    .fitCenter()
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
-                    .into(holder.imageView)
-
-                holder.imageView.onClick {
-                    (lifecycleOwner as ChatRoomFragment).zoomImageFromThumb(holder.imageView, dataset[position].url)
-                }
-
-                holder.imageView.visibility = View.VISIBLE
-            }
-        }
-*/
     }
 
 }

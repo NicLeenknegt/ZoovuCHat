@@ -1,10 +1,9 @@
 package com.zoovu.zuuvochat.utils.render_factory.render_picker
 
-import com.zoovu.zuuvochat.domain.Model
-import com.zoovu.zuuvochat.utils.render_factory.render_types.ButtonRender
-import com.zoovu.zuuvochat.utils.render_factory.render_types.ImageRender
-import com.zoovu.zuuvochat.utils.render_factory.render_types.MultpleImagesRender
-import com.zoovu.zuuvochat.utils.render_factory.render_types.TextRender
+import com.zoovu.zuuvochat.domain.adapters.zoovu.render_types.ButtonRender
+import com.zoovu.zuuvochat.domain.adapters.zoovu.render_types.ImageRender
+import com.zoovu.zuuvochat.domain.adapters.zoovu.render_types.MultpleImagesRender
+import com.zoovu.zuuvochat.domain.adapters.zoovu.render_types.TextRender
 import org.json.JSONObject
 
 class ZoovuJSONObjectPicker:RenderPicker {

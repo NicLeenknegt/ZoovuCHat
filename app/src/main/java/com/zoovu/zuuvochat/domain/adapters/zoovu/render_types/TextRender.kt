@@ -1,12 +1,13 @@
-package com.zoovu.zuuvochat.utils.render_factory.render_types
+package com.zoovu.zuuvochat.domain.adapters.zoovu.render_types
 
-import android.util.Log
 import com.zoovu.zuuvochat.domain.Model
 import com.zoovu.zuuvochat.domain.Type
 import com.zoovu.zuuvochat.utils.render_factory.render_builder.MessageBuilder
+import com.zoovu.zuuvochat.utils.render_factory.render_types.RenderType
 import org.json.JSONObject
 
-class TextRender(private var json:JSONObject):RenderType<ArrayList<Model.Message>> {
+class TextRender(private var json:JSONObject):
+    RenderType<ArrayList<Model.Message>> {
 
     private var messages:ArrayList<Model.Message> = arrayListOf()
 
