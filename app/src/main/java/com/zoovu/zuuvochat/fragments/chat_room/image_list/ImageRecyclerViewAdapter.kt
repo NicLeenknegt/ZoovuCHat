@@ -47,6 +47,7 @@ class ImageRecyclerViewAdapter(
             .asBitmap()
             .load(dataset[position].url)
             .fitCenter()
+            .placeholder(R.drawable.zoovu_logo)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
             .into(holder.image)
 

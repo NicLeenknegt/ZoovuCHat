@@ -17,6 +17,8 @@ class ReplySingleImageViewRender(private var pair: Pair<Model.Message, ChatRecyc
     override fun render(): RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder> {
         val (message, holder) = pair
         if (message.type == Type.SINGLE_IMAGE) {
+            holder.loadingSpinner.visibility = View.GONE
+
             if (message.text != null) {
                 holder.replyTextView.text = message.text!!
                 holder.replyTextView.visibility = View.VISIBLE

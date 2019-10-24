@@ -9,22 +9,23 @@ import android.content.Context
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.RectF
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LayoutAnimationController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.zoovu.zuuvochat.MainActivity
 
 import com.zoovu.zuuvochat.R
@@ -58,7 +59,6 @@ class ChatRoomFragment :ChatRoomController() {
             conViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         }?: throw Exception("Invalid activity.")
         return inflater.inflate(R.layout.fragment_chat_room, container, false)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +66,26 @@ class ChatRoomFragment :ChatRoomController() {
         shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
     }
 
+    private fun dpToPixelsInt(dp:Int):Int {
+        if (context != null) {
+            return (dp *resources.displayMetrics.density + 0.5f).toInt()
+        }
+        return 0
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewManager  = LinearLayoutManager(activity as MainActivity)
         viewAdapter = ChatRecyclerViewAdapter(conViewModel, this, activity as MainActivity)
+        viewManager.stackFromEnd = true
         viewManager.reverseLayout = true
+
+        view.viewTreeObserver.addOnGlobalLayoutListener {
+            var heightDiff = view.rootView.height - view.height
+            if (heightDiff > dpToPixelsInt(200)) {
+                chat_recycler_view.smoothScrollToPosition(0)
+            }
+        }
 
         (chat_recycler_view as RecyclerView) .apply {
             setHasFixedSize(true)
@@ -78,13 +93,17 @@ class ChatRoomFragment :ChatRoomController() {
             adapter = viewAdapter
         }
 
+
+        conViewModel.selectedConversation.observe( this, Observer {
+            chat_recycler_view.smoothScrollToPosition(0)
+        })
+
         message_send_button.onClick {
             if (message_text_input.text.toString().isNotEmpty()) {
-                conViewModel.sendReply(Model.Message("none", message_text_input.text.toString(), Type.USER, fromUser = true))
+                conViewModel.sendReply(Model.Message("none", message_text_input.text.toString(), Type.USER_TEXT))
                 message_text_input.text.clear()
             }
         }
-
     }
 
     private fun View.hideKeyboard() {

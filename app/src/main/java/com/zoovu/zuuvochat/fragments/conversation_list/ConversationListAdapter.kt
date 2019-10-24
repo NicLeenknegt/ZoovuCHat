@@ -69,7 +69,7 @@ class ConversationListAdapter(
 
         var conversation = getItem(position)
         viewHolder.text!!.text = conversation.name
-        viewHolder.image!!.imageResource = R.drawable.ic_launcher_background
+        viewHolder.image!!.imageResource = R.drawable.ic_android_logo_svg_vector
 
         view!!.onClick {
             conViewModel.selectedConversation.value = getItem(position)

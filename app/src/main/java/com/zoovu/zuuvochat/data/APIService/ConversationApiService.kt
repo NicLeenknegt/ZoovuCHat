@@ -10,10 +10,11 @@ import retrofit2.http.Headers
 
 interface ConversationApiService {
 
+    @Headers("Content-Type: application/json; charset=utf-8")
     @POST("{path}")
     fun startConversation(@Path(value = "path", encoded = true) path:String):Observable<ResponseBody>
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/json; charset=utf-8")
     @POST("{path}")
     fun sendReply(@Path(value = "path", encoded = true) path:String, @Body conversation: RequestBody):Observable<ResponseBody>
 }

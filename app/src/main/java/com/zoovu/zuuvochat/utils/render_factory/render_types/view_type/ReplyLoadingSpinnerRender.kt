@@ -8,24 +8,17 @@ import com.zoovu.zuuvochat.utils.render_factory.render_builder.MessageItemViewHo
 import com.zoovu.zuuvochat.utils.render_factory.render_builder.RenderBuilder
 import com.zoovu.zuuvochat.utils.render_factory.render_types.RenderType
 
-class ReplyTextViewRender(private var pair: Pair<Model.Message, ChatRecyclerViewAdapter.MessageItemViewHolder>):RenderType<ChatRecyclerViewAdapter.MessageItemViewHolder> {
+class ReplyLoadingSpinnerRender(private var pair: Pair<Model.Message, ChatRecyclerViewAdapter.MessageItemViewHolder>):RenderType<ChatRecyclerViewAdapter.MessageItemViewHolder> {
 
     override fun render(): RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder> {
         var (message, holder) = pair
-        if (message.type == Type.TEXT) {
-            holder.loadingSpinner.visibility = View.GONE
-            if (message.text != null) {
-                holder.replyTextView.text = message.text!!
-                holder.replyTextView.visibility = View.VISIBLE
-            } else {
-                holder.replyTextView.visibility = View.GONE
-            }
-            holder.userCardView.visibility = View.INVISIBLE
-            holder.replyCardView.visibility = View.VISIBLE
-            holder.recyclerView.visibility = View.GONE
+        if (message.type == Type.LOADING) {
+            holder.loadingSpinner.visibility = View.VISIBLE
             holder.imageView.visibility = View.GONE
+            holder.replyCardView.visibility = View.GONE
+            holder.userCardView.visibility = View.GONE
+            holder.recyclerView.visibility = View.GONE
         }
         return MessageItemViewHolderBuilder(holder)
     }
-
 }

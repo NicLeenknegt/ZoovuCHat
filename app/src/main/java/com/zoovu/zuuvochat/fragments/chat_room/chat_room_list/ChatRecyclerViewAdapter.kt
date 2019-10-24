@@ -1,9 +1,11 @@
 package com.zoovu.zuuvochat.fragments.chat_room.chat_room_list
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.github.ybq.android.spinkit.SpinKitView
+import com.google.gson.Gson
 import com.zoovu.zuuvochat.R
 import com.zoovu.zuuvochat.domain.Model
 import com.zoovu.zuuvochat.domain.Type
@@ -58,6 +62,7 @@ class ChatRecyclerViewAdapter(
         val replyCardView:CardView = view.reply_message_item_card
         val recyclerView:RecyclerView = view.button_recycler_view
         val imageView:ImageView = view.reply_message_image
+        var loadingSpinner:SpinKitView = view.loading_spinner
         var verticalLayoutManager = LinearLayoutManager(context)
         var horizontalLayoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
         var buttonRecyclerViewAdapter = ButtonRecyclerViewAdapter(lifecycleOwner as ChatRoomController)
@@ -80,6 +85,11 @@ class ChatRecyclerViewAdapter(
             .setInput(Pair(dataset[position], holder))
             .selectViewHolders()
             .build()
+    }
+
+    override fun onViewDetachedFromWindow(holder: MessageItemViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.view.clearAnimation()
     }
 
 }

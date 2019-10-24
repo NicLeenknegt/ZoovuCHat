@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         fragment = ConversationListFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_con, fragment)
-            .addToBackStack(null)
+            .addToBackStack("tag")
             .commit()
 
         conViewModel.toastMessage.observe(this, Observer { it:String? ->

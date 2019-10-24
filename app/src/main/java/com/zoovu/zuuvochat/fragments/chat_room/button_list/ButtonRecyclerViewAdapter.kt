@@ -1,7 +1,5 @@
 package com.zoovu.zuuvochat.fragments.chat_room.button_list
 
-import android.content.Context
-import android.service.autofill.Dataset
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -9,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zoovu.zuuvochat.R
 import com.zoovu.zuuvochat.domain.Model
 import com.zoovu.zuuvochat.domain.Type
-import com.zoovu.zuuvochat.domain.viewmodels.ConversationViewModel
 import com.zoovu.zuuvochat.fragments.chat_room.ChatRoomController
 import kotlinx.android.synthetic.main.chat_message_button.view.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -45,8 +42,7 @@ class ButtonRecyclerViewAdapter(
                 Model.Message(
                     "none",
                     dataset[position].title,
-                    Type.USER,
-                    fromUser = true
+                    Type.USER_TEXT
                 )
             )
         }

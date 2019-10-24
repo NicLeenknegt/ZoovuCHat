@@ -9,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.zoovu.zuuvochat.domain.adapters.zoovu.ZoovuModule
+import com.zoovu.zuuvochat.domain.adapters.zoovu_v2.ZoovuV2Module
 import com.zoovu.zuuvochat.domain.services.SubscribeService
 
 

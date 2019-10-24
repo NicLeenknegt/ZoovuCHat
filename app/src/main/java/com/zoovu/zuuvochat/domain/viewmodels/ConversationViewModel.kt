@@ -3,6 +3,7 @@ package com.zoovu.zuuvochat.domain.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.zoovu.zuuvochat.domain.Model
+import com.zoovu.zuuvochat.domain.Type
 import com.zoovu.zuuvochat.domain.services.SubscribeService
 import com.zoovu.zuuvochat.injection.domain.InjectedViewModel
 import io.reactivex.Observer
@@ -56,11 +57,15 @@ class ConversationViewModel: InjectedViewModel() {
         return object : Observer<Model.Conversation> {
 
             override fun onSubscribe(d: Disposable) {
-                Log.d("API", "SUBSCRIBE")
+                var conversation = selectedConversation.value!!
+                conversation.messages.add(Model.Message("none", "none", Type.LOADING))
+                selectedConversation.postValue(conversation)
             }
 
             override fun onNext(replyConversation: Model.Conversation) {
-                replyConversation.messages.addAll(0, selectedConversation.value!!.messages)
+                var conversation = selectedConversation.value!!
+                replyConversation.messages.addAll(0, conversation.messages)
+                replyConversation.messages = ArrayList(replyConversation.messages.filter { it.type != Type.LOADING })
                 selectedConversation.postValue(replyConversation)
             }
 

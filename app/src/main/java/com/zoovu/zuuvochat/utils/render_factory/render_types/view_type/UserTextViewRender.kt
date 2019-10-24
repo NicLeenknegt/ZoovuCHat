@@ -12,9 +12,10 @@ class UserTextViewRender(private var pair: Pair<Model.Message, ChatRecyclerViewA
 
     override fun render(): RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder> {
         var (message, holder) = pair
-        if (message.type == Type.USER) {
+        if (message.type == Type.USER_TEXT) {
+            holder.loadingSpinner.visibility = View.GONE
             holder.userTextView.text = message.text!!
-            holder.replyCardView.visibility = View.INVISIBLE
+            holder.replyCardView.visibility = View.GONE
             holder.userCardView.visibility = View.VISIBLE
             holder.recyclerView.visibility = View.GONE
             holder.imageView.visibility = View.GONE

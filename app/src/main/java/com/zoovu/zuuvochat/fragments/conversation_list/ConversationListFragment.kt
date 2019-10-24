@@ -38,7 +38,7 @@ class ConversationListFragment : Fragment() {
             conViewModel = ViewModelProviders.of(this).get(ConversationViewModel::class.java)
         }?: throw Exception("Invalid activity.")
         conversationListAdapter = ConversationListAdapter(this, conViewModel, activity as MainActivity)
-        conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
+        conViewModel.conversations.value!!.add(Model.Conversation(id = "ck0w6475c00cneoqr46r4o6ua", name =  "TestBot", messages = arrayListOf()))
         conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
         conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))
         conViewModel.conversations.value!!.add(Model.Conversation(id = "cjwix19y2007clrqrtyagcfjz", name =  "TestBot 1", messages = arrayListOf()))

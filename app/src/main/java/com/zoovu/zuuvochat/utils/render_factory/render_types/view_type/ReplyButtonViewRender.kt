@@ -24,6 +24,7 @@ class ReplyButtonViewRender(private var pair: Pair<Model.Message, ChatRecyclerVi
             }
             holder.userCardView.visibility = View.INVISIBLE
             holder.replyCardView.visibility = View.VISIBLE
+            holder.loadingSpinner.visibility = View.GONE
             holder.imageView.visibility = View.GONE
             val linerLayoutManager = if (message.isSpecial)
                 holder.horizontalLayoutManager

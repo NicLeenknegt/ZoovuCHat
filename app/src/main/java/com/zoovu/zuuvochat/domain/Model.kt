@@ -1,7 +1,5 @@
 package com.zoovu.zuuvochat.domain
 
-import android.util.Log
-import com.google.gson.Gson
 import org.json.JSONObject
 
 class Model {
@@ -11,13 +9,15 @@ class Model {
         var payload: JSONObject? = null,
         var name:String,
         @Transient
-        var messages:ArrayList<Message>
+        var messages:ArrayList<Message>,
+        @Transient
+        var newMessages:ArrayList<Message> = arrayListOf()
     ) {
         fun userMessages():ArrayList<Message> {
             var replies:ArrayList<Message> = arrayListOf()
 
             for (message in this.messages.reversed()) {
-                if (message.fromUser)
+                if (message.type == Type.USER_TEXT)
                     replies.add(message)
                 else
                     return replies
@@ -31,7 +31,6 @@ class Model {
         var text: String?,
         var type:Type,
         var isSpecial:Boolean = false,
-        var fromUser:Boolean = false,
         var buttons:ArrayList<Button> = arrayListOf(),
         var images:ArrayList<Image> = arrayListOf(),
         var url:String = "none"
@@ -50,7 +49,9 @@ class Model {
 }
 
 enum class Type {
-    USER,
+    USER_TEXT,
+    USER_BUTTON_REPLY,
+    LOADING,
     TEXT,
     BUTTON_QUESTION,
     SINGLE_IMAGE,

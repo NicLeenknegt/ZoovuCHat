@@ -13,6 +13,7 @@ class ReplyMultipleImagesViewRender(private var pair: Pair<Model.Message, ChatRe
     override fun render(): RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder> {
         var (message, holder) = pair
         if (message.type == Type.MULTIPLE_IMAGES) {
+            holder.loadingSpinner.visibility = View.GONE
             holder.imageRecyclerViewAdapter.dataset = message.images
             holder.replyCardView.visibility = View.GONE
             holder.userCardView.visibility = View.GONE

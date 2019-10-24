@@ -15,7 +15,8 @@ class ViewHolderPicker:RenderPicker {
                     UserTextViewRender(input),
                     ReplyTextViewRender(input),
                     ReplyButtonViewRender(input),
-                    ReplySingleImageViewRender(input)
+                    ReplySingleImageViewRender(input),
+                    ReplyLoadingSpinnerRender(input)
                 )
             }
             return null
