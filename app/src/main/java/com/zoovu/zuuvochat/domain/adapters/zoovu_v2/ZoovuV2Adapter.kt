@@ -17,7 +17,6 @@ class ZoovuV2Adapter(private val renderFactory: RenderFactory):ModelAdapter(rend
         val data = JSONObject(response.string())
         if (data.has("body") && data.get("body") is JSONObject) {
             val body = data.getJSONObject("body")
-            Log.d("JSON","${body.has("context")}")
             if (body.has("context")) {
                 var conver = Model.Conversation(
                     payload = body.getJSONObject("context"),
@@ -27,9 +26,6 @@ class ZoovuV2Adapter(private val renderFactory: RenderFactory):ModelAdapter(rend
                         .build(),
                     name = "none"
                 )
-                Log.d("JSON", "${conver.messages.size}")
-                Log.d("JSON", "${conver.messages.isEmpty()}")
-
                 return conver
             }
         }
@@ -43,13 +39,11 @@ class ZoovuV2Adapter(private val renderFactory: RenderFactory):ModelAdapter(rend
     }
 
     override fun toRequestBody(conversation: Model.Conversation): RequestBody {
-        Log.d("API_CHECK",Gson().toJson(conversation))
         var data = JSONObject()
         var context = conversation.payload!!
         context.remove("inputMessage")
         context.put("inputMessage", "")
         data.put("context", context)
-        Log.d("API_CHECK",Gson().toJson(data))
         return RequestBody.create(MediaType.parse("application/json"), data.toString())
     }
 }

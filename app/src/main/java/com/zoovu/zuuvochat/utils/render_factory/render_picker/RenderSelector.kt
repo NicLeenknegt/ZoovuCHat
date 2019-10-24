@@ -16,14 +16,23 @@ class RenderSelector(vararg renderTypes: RenderType<*>) {
         }
     }
 
+    /**
+     * Determines return type as ArrayList<Model.Message>
+     */
     fun selectMessages():RenderBuilder<ArrayList<Model.Message>> {
         return select() as RenderBuilder<ArrayList<Model.Message>>
     }
 
+    /**
+     * Determines return type as ChatRecyclerViewAdapter.MessageItemViewHolder
+     */
     fun selectViewHolders():RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder> {
         return select() as RenderBuilder<ChatRecyclerViewAdapter.MessageItemViewHolder>
     }
 
+    /**
+     * Collects all renderBuilders en combines them via BuilderCombiner.
+     */
     private fun select(): RenderBuilder<*> {
 
 
@@ -34,4 +43,9 @@ class RenderSelector(vararg renderTypes: RenderType<*>) {
         }
         return BuilderCombiner().render(*renderBuilderArray.toTypedArray())
     }
+
+
+    /**
+     *   RenderSelector => BuilderCombiner => RenderBuilder
+     */
 }
